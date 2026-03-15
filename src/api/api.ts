@@ -22,7 +22,8 @@ export const ENDPOINTS = {
   LOGIN: "/auth/login",
   AUTH_ME: "/auth/me",
   REFRESH: "/auth/refresh",
-  PRODUCTS: "/products"
+  PRODUCTS: "/products",
+  PRODUCTS_SEARCH: "/products/search",
 };
 
 interface IRefreshResponse {

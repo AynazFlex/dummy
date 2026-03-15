@@ -24,15 +24,18 @@ interface IProductsState {
   sortBy?: string;
   order?: "asc" | "desc";
   search?: string;
+  selectedProducts: number[];
   setSkip: (skip: number) => void;
   setLimit: (limit: number) => void;
   setSort: (sortBy: string) => void;
   setSearch: (search?: string) => void;
+  setSelectedProducts: (products: number[]) => void;
 }
 
 export const useProducts = create<IProductsState>((set) => ({
   skip: 0,
   limit: 10,
+  selectedProducts: [],
   setSkip: (skip) => {
     set({ skip });
   },
@@ -49,6 +52,11 @@ export const useProducts = create<IProductsState>((set) => ({
   setSearch: (search) => {
     set({ search, skip: 0 });
   },
+  setSelectedProducts: (products) => {
+    set({
+      selectedProducts: products
+    })
+  }
 }));
 
 export const useProductsQuery = () => {
@@ -61,8 +69,8 @@ export const useProductsQuery = () => {
   const query = useQuery({
     queryKey: ["products", skip, limit, sortBy, order, search],
     queryFn: async () => {
-      const params = search ? { q: search } : { skip, limit, sortBy, order };
-      const url = search ? `${ENDPOINTS.PRODUCTS}/search` : ENDPOINTS.PRODUCTS;
+      const params = { skip, limit, sortBy, order, q: search || undefined };
+      const url = search ? ENDPOINTS.PRODUCTS_SEARCH : ENDPOINTS.PRODUCTS;
       const { data } = await api.get<IProductsResponse>(url, {
         params,
       });
