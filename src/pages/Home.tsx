@@ -3,7 +3,7 @@ import { ProductsTable } from "@/widgets";
 import { Button, Flex, Stack, TextInput, Title } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconLogout, IconSearch } from "@tabler/icons-react";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export const Home = () => {
   const [value, setValue] = useState<string>();
@@ -14,7 +14,7 @@ export const Home = () => {
     logout();
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setSearch(debounced);
   }, [debounced]);
 
