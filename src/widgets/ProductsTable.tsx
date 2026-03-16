@@ -2,6 +2,7 @@ import { useProducts, useProductsQuery } from "@/hooks";
 import {
   ActionIcon,
   Box,
+  Center,
   Checkbox,
   Flex,
   Loader,
@@ -81,7 +82,11 @@ export const ProductsTable = () => {
       <Flex justify="space-between" align="center">
         <Text>Все позиции</Text>
         <Flex gap="sm" align="center">
-          <ActionIcon disabled={isFetching} onClick={() => refetch()} variant="default">
+          <ActionIcon
+            disabled={isFetching}
+            onClick={() => refetch()}
+            variant="default"
+          >
             <IconRefresh size={20} />
           </ActionIcon>
           <ProductFormModal />
@@ -151,6 +156,10 @@ export const ProductsTable = () => {
             />
           </Flex>
         </>
+      ) : isFetching ? (
+        <Center>
+          <Loader />
+        </Center>
       ) : (
         <Text ta="center">Нет данных</Text>
       )}
