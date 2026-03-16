@@ -18,6 +18,9 @@ interface IProductsResponse {
   limit: number;
 }
 
+const ORDER = "order";
+const SORT_BY = "sortBy";
+
 interface IProductsState {
   skip: number;
   limit: number;
@@ -35,6 +38,8 @@ interface IProductsState {
 export const useProducts = create<IProductsState>((set) => ({
   skip: 0,
   limit: 10,
+  order: (localStorage.getItem(ORDER) as "asc" | "desc") || undefined,
+  sortBy: localStorage.getItem(SORT_BY) || undefined,
   selectedProducts: [],
   setSkip: (skip) => {
     set({ skip });
@@ -45,8 +50,15 @@ export const useProducts = create<IProductsState>((set) => ({
   setSort: (sortBy) => {
     set((state) => {
       const isSameSort = state.sortBy === sortBy;
+      if (isSameSort && state.order === "desc") {
+        localStorage.removeItem(ORDER);
+        localStorage.removeItem(SORT_BY);
+        return { sortBy: undefined, order: undefined, skip: 0 };
+      }
       const order = isSameSort && state.order === "asc" ? "desc" : "asc";
-      return { sortBy, order };
+      localStorage.setItem(ORDER, order);
+      localStorage.setItem(SORT_BY, sortBy);
+      return { sortBy, order, skip: 0 };
     });
   },
   setSearch: (search) => {
@@ -54,9 +66,9 @@ export const useProducts = create<IProductsState>((set) => ({
   },
   setSelectedProducts: (products) => {
     set({
-      selectedProducts: products
-    })
-  }
+      selectedProducts: products,
+    });
+  },
 }));
 
 export const useProductsQuery = () => {

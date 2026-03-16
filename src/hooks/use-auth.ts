@@ -54,8 +54,7 @@ export const useAuth = create<IUseAuthState>((set) => ({
     try {
       const response = await api.post<ILoginResponse>(ENDPOINTS.LOGIN, {
         username,
-        password,
-        expiresInMins: 1,
+        password
       });
       saveTokens(
         response.data.accessToken,

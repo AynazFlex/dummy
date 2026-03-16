@@ -1,5 +1,6 @@
 import { useProducts, useProductsQuery } from "@/hooks";
 import {
+  ActionIcon,
   Box,
   Checkbox,
   Flex,
@@ -11,6 +12,12 @@ import {
   Text,
   UnstyledButton,
 } from "@mantine/core";
+import {
+  IconArrowNarrowDown,
+  IconArrowNarrowUp,
+  IconRefresh,
+} from "@tabler/icons-react";
+import { ProductFormModal } from "./ProductForm";
 
 const TableHead = {
   title: "Наименование",
@@ -25,9 +32,11 @@ export const ProductsTable = () => {
   const setSkip = useProducts((state) => state.setSkip);
   const skip = useProducts((state) => state.skip);
   const limit = useProducts((state) => state.limit);
+  const order = useProducts((state) => state.order);
+  const sortBy = useProducts((state) => state.sortBy);
   const selectedProducts = useProducts((state) => state.selectedProducts);
   const setSelectedProducts = useProducts((state) => state.setSelectedProducts);
-  const { data, isFetching } = useProductsQuery();
+  const { data, isFetching, refetch } = useProductsQuery();
 
   const rows = data?.products?.map((product) => (
     <Table.Tr
@@ -69,7 +78,15 @@ export const ProductsTable = () => {
 
   return (
     <Stack gap="40px">
-      <Text>Все позиции</Text>
+      <Flex justify="space-between" align="center">
+        <Text>Все позиции</Text>
+        <Flex gap="sm" align="center">
+          <ActionIcon disabled={isFetching} onClick={() => refetch()} variant="default">
+            <IconRefresh size={20} />
+          </ActionIcon>
+          <ProductFormModal />
+        </Flex>
+      </Flex>
       {data?.products.length ? (
         <>
           <Box pos="relative">
@@ -109,7 +126,15 @@ export const ProductsTable = () => {
                   {Object.entries(TableHead).map(([key, value]) => (
                     <Table.Th key={key}>
                       <UnstyledButton onClick={() => setSort(key)}>
-                        {value}
+                        <Flex align="center">
+                          {value}
+                          {sortBy === key &&
+                            (order === "asc" ? (
+                              <IconArrowNarrowUp size={18} />
+                            ) : (
+                              <IconArrowNarrowDown size={18} />
+                            ))}
+                        </Flex>
                       </UnstyledButton>
                     </Table.Th>
                   ))}

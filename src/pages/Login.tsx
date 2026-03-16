@@ -8,10 +8,12 @@ import {
   Paper,
   PasswordInput,
   Stack,
+  Text,
   TextInput,
   Title,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
+import { IconLock, IconUser } from "@tabler/icons-react";
 
 interface ILoginFormValues {
   username: string;
@@ -65,12 +67,16 @@ export const Login = () => {
   return (
     <Center mih="100vh">
       <Paper withBorder shadow="md" p={30} radius="md">
-        <Title order={1} mb="md">
-          Вход
+        <Title ta="center" order={1} mb="md">
+          Добро пожаловать!
         </Title>
+        <Text ta="center" mb="xs">
+          Пожалуйста, авторизируйтесь
+        </Text>
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <Stack gap="md" w={420}>
             <TextInput
+              leftSection={<IconUser size={18} />}
               withAsterisk
               label="Логин"
               placeholder="Введите логин"
@@ -78,6 +84,7 @@ export const Login = () => {
               {...form.getInputProps("username")}
             />
             <PasswordInput
+              leftSection={<IconLock size={18} />}
               withAsterisk
               label="Пароль"
               placeholder="Введите пароль"
@@ -85,7 +92,7 @@ export const Login = () => {
               {...form.getInputProps("password")}
             />
             <Checkbox
-              label="Запомнить меня"
+              label="Запомнить данные"
               key={form.key("remember")}
               {...form.getInputProps("remember", { type: "checkbox" })}
             />
